@@ -12,6 +12,17 @@ spring:
     username: ENC(8Yq7h6TkqZz6Z6e66c8mWAv1opA1nKaZ)
     password: ENC(qs5Od7qZQrBGSPLFYfw0j8+frrUUl3Z3)
 
+  data:
+    redis:
+      repositories:
+        enabled: false
+      host: ENC(Lgvt2ysV2Bxzqx8RDiwQ5t8OhC8jlPSZ)
+      port: 6379
+      password: ENC(QRbRfXgO4UUWa0ztmn3cj1fR/lmlzQ+9XWam8bhAt4dcWvN+4XQuSyNLvYaNOznqfmohdnqiotNfCUEIcYNwe7maMf2ApcW8JOqCrOQizEg=)
+
+  cache:
+    type: redis
+
   jpa:
     show-sql: true
     database: mysql
