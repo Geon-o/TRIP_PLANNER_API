@@ -1,4 +1,4 @@
-package com.example.trip_planner.util.redis;
+package com.example.trip_planner.config.redis;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

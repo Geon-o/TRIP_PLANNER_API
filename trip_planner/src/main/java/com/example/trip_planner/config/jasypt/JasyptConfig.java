@@ -1,4 +1,4 @@
-package com.example.trip_planner.util.jasypt;
+package com.example.trip_planner.config.jasypt;
 
 import org.jasypt.encryption.StringEncryptor;
 import org.jasypt.encryption.pbe.PooledPBEStringEncryptor;

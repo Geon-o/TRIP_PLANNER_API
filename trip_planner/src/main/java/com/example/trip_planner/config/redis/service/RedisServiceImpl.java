@@ -1,4 +1,4 @@
-package com.example.trip_planner.util.redis.service;
+package com.example.trip_planner.config.redis.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -26,11 +26,11 @@ public class RedisServiceImpl implements RedisService{
      * @param memNo
      * @param expireTime
      */
-    public void setKeyAndValue(String token, Long memNo, int expireTime) {
-        String memMoToString = String.valueOf(memNo);
+    @Override
+    public void setKeyAndValue(String token, String memNo, int expireTime) {
         ValueOperations<String, String> valueOps = stringRedisTemplate.opsForValue();
         int ttlSeconds = expireTime * 60;
-        valueOps.set(token, memMoToString, Duration.ofSeconds(ttlSeconds));
+        valueOps.set(token, memNo, Duration.ofSeconds(ttlSeconds));
     }
 
     @Override
