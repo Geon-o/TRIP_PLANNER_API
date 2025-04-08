@@ -1,4 +1,4 @@
-package com.example.trip_planner.signUp.controller;
+package com.example.trip_planner.user.signUp.controller;
 
 import com.example.trip_planner.user.signUp.request.EmailAuthRequest;
 import com.example.trip_planner.user.signUp.service.EmailAuthServiceImpl;

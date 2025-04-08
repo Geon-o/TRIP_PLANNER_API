@@ -1,4 +1,4 @@
-package com.example.trip_planner.signUp.request;
+package com.example.trip_planner.user.signUp.request;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

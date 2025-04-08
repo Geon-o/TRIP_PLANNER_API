@@ -1,10 +1,10 @@
-package com.example.trip_planner.signUp.service;
+package com.example.trip_planner.user.signUp.service;
 
 import com.example.trip_planner.config.mail.service.MailService;
 import com.example.trip_planner.user.signUp.request.EmailAuthRequest;
 import com.example.trip_planner.user.signUp.util.AuthTokenIssuance;
-import com.example.trip_planner.config.redis.service.RedisService;
 import com.example.trip_planner.user.signUp.util.EmailVerification;
+import com.example.trip_planner.config.redis.service.RedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
