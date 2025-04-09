@@ -10,7 +10,7 @@ public class EmailVerification {
      * @param email
      */
     public void emailVerification(String email) {
-        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-z]{2,7}$";
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:naver|gmail)\\.com$";
 
         if (!email.matches(emailRegex)) {
             throw new IllegalArgumentException("email is not valid");

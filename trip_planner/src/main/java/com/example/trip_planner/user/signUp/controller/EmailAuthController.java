@@ -1,15 +1,12 @@
 package com.example.trip_planner.user.signUp.controller;
 
+import com.example.trip_planner.user.signUp.request.CheckAuthTokenRequest;
 import com.example.trip_planner.user.signUp.request.EmailAuthRequest;
 import com.example.trip_planner.user.signUp.service.EmailAuthServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-@Slf4j
 @RestController
 @RequestMapping("/emailAuth")
 @RequiredArgsConstructor
@@ -19,10 +16,12 @@ public class EmailAuthController {
 
     @PostMapping("/sendVerificationNo")
     public void sendVerificationNo(@RequestBody EmailAuthRequest request) {
-
         service.registerVerificationNo(request);
-        log.info("email : {}", request.getEmail());
+    }
 
+    @PostMapping("/checkVerificationNo")
+    public boolean checkVerificationNo(@RequestBody CheckAuthTokenRequest request) {
+        return service.checkVerificationNo(request);
     }
 }
 
