@@ -1,10 +1,9 @@
-package com.example.trip_planner.user.signUp.controller;
+package com.example.trip_planner.user.signUp.auth.controller;
 
-import com.example.trip_planner.user.signUp.request.CheckAuthTokenRequest;
-import com.example.trip_planner.user.signUp.request.EmailAuthRequest;
-import com.example.trip_planner.user.signUp.service.EmailAuthServiceImpl;
+import com.example.trip_planner.user.signUp.auth.request.EmailAuthRequest;
+import com.example.trip_planner.user.signUp.auth.service.EmailAuthServiceImpl;
+import com.example.trip_planner.user.signUp.auth.request.CheckAuthTokenRequest;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
