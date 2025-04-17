@@ -1,10 +1,14 @@
-package com.example.trip_planner.user.signUp.auth.util;
+package com.example.trip_planner.member.util;
 
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class AuthTokenIssuance {
 
+    /**
+     * 이메일 인증번호 발급 로직
+     * @return
+     */
     public String issueToken() {
         String token = "";
 

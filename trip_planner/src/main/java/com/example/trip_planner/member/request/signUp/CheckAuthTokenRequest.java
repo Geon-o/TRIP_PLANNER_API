@@ -1,4 +1,4 @@
-package com.example.trip_planner.user.signUp.auth.request;
+package com.example.trip_planner.member.request.signUp;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,8 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class EmailAuthRequest {
-
+public class CheckAuthTokenRequest {
     private String email;
-    private int deadlineTime;
+    private String authToken;
 }

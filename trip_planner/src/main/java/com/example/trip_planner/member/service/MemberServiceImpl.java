@@ -1,10 +1,10 @@
-package com.example.trip_planner.user.signUp.auth.service;
+package com.example.trip_planner.member.service;
 
 import com.example.trip_planner.config.mail.service.MailService;
-import com.example.trip_planner.user.signUp.auth.request.EmailAuthRequest;
-import com.example.trip_planner.user.signUp.auth.request.CheckAuthTokenRequest;
-import com.example.trip_planner.user.signUp.auth.util.AuthTokenIssuance;
-import com.example.trip_planner.user.signUp.auth.util.EmailVerification;
+import com.example.trip_planner.member.request.signUp.EmailAuthRequest;
+import com.example.trip_planner.member.request.signUp.CheckAuthTokenRequest;
+import com.example.trip_planner.member.util.AuthTokenIssuance;
+import com.example.trip_planner.member.util.EmailVerification;
 import com.example.trip_planner.config.redis.service.RedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class EmailAuthServiceImpl {
+public class MemberServiceImpl {
 
     private final RedisService redisService;
     private final AuthTokenIssuance tokenIssuance;

@@ -1,4 +1,4 @@
-package com.example.trip_planner.user.signUp.auth.util;
+package com.example.trip_planner.member.util;
 
 import org.springframework.context.annotation.Configuration;
 
