@@ -7,7 +7,7 @@ jasypt:
 
 spring:
   datasource:
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
     url: ENC(8dXhFlAqq7PxgtS1rBsBFlx6CQl+npOWGKTlySA0HNe5N0FOPfsf44IwzbYNRB7kTHfwykXIKE/yVDilMAhfEDX9Jnui9siSl+JEVh2MZceEQlxgK+nc4AhAhBmFNZb6ZCy8OOEvTSX0qaRjsm5iCA==)
     username: ENC(8Yq7h6TkqZz6Z6e66c8mWAv1opA1nKaZ)
     password: ENC(qs5Od7qZQrBGSPLFYfw0j8+frrUUl3Z3)
