@@ -1,6 +1,8 @@
 package com.example.trip_planner.member.service;
 
 import com.example.trip_planner.config.mail.service.MailService;
+import com.example.trip_planner.member.entity.Member;
+import com.example.trip_planner.member.repository.MemberRepository;
 import com.example.trip_planner.member.request.signUp.EmailAuthRequest;
 import com.example.trip_planner.member.request.signUp.CheckAuthTokenRequest;
 import com.example.trip_planner.member.util.AuthTokenIssuance;
@@ -9,6 +11,8 @@ import com.example.trip_planner.config.redis.service.RedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -19,6 +23,7 @@ public class MemberServiceImpl {
     private final AuthTokenIssuance tokenIssuance;
     private final MailService mailService;
     private final EmailVerification emailVerification;
+    private final MemberRepository memberRepository;
 
     /**
      * 토큰 발급 후 레디스 등록 및 이메일 발송
@@ -58,6 +63,16 @@ public class MemberServiceImpl {
 
         if (token.equals(request.getAuthToken())) {
             redisService.deleteByKey(request.getEmail());
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean checkDuplicateUserId(String userId) {
+        Optional<Member> MaybeUserId = memberRepository.findByUserId(userId);
+
+        if (MaybeUserId.isEmpty()) {
             return true;
         }
 

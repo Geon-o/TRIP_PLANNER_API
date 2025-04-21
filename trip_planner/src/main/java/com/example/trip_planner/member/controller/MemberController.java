@@ -22,5 +22,10 @@ public class MemberController {
     public boolean checkVerificationNo(@RequestBody CheckAuthTokenRequest request) {
         return service.checkVerificationNo(request);
     }
+
+    @GetMapping("/checkDuplicateUserId/{userId}")
+    public boolean checkDuplicateUserId(@PathVariable String userId) {
+        return service.checkDuplicateUserId(userId);
+    }
 }
 
