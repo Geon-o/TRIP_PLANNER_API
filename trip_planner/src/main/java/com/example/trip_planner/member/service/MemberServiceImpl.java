@@ -11,6 +11,7 @@ import com.example.trip_planner.member.util.EmailVerification;
 import com.example.trip_planner.config.redis.service.RedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +28,6 @@ public class MemberServiceImpl {
     private final MailService mailService;
     private final EmailVerification emailVerification;
     private final MemberRepository memberRepository;
-    private final PasswordEncoder passwordEncoder;
 
     /**
      * 토큰 발급 후 레디스 등록 및 이메일 발송
@@ -83,6 +83,8 @@ public class MemberServiceImpl {
     }
 
     public void signUp(SignUpRequest request) {
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
         Member member = Member.builder()
                 .email(request.getEmail())
                 .userId(request.getUserId())
