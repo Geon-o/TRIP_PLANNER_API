@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
 
@@ -34,5 +35,14 @@ public class Member {
 
     @LastModifiedDate
     private LocalDateTime updateDate;
+
+    public Member hashPassword(PasswordEncoder passwordEncoder) {
+        this.password = passwordEncoder.encode(this.password);
+        return this;
+    }
+
+    public boolean checkPassword(String plainPassword, PasswordEncoder passwordEncoder) {
+        return passwordEncoder.matches(plainPassword, this.password);
+    }
 
 }

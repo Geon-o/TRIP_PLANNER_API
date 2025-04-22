@@ -1,7 +1,6 @@
 package com.example.trip_planner.member.service;
 
 import com.example.trip_planner.config.mail.service.MailService;
-import com.example.trip_planner.member.entity.Member;
 import com.example.trip_planner.member.repository.MemberRepository;
 import com.example.trip_planner.member.request.signUp.EmailAuthRequest;
 import com.example.trip_planner.member.request.signUp.CheckAuthTokenRequest;
@@ -69,13 +68,12 @@ public class MemberServiceImpl {
         return false;
     }
 
+    /**
+     * 사용자 Id 중복체크 로직
+     * @param userId
+     * @return
+     */
     public boolean checkDuplicateUserId(String userId) {
-        Optional<Member> MaybeUserId = memberRepository.findByUserId(userId);
-
-        if (MaybeUserId.isEmpty()) {
-            return true;
-        }
-
-        return false;
+        return memberRepository.findByUserId(userId).isEmpty();
     }
 }
