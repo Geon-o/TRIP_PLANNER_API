@@ -1,0 +1,15 @@
+package com.example.trip_planner.member.request.signUp;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+public class SignUpRequest {
+
+    private String email;
+    private String userId;
+    private String password;
+}

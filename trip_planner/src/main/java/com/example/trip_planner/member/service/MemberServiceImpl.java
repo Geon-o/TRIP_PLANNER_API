@@ -1,16 +1,20 @@
 package com.example.trip_planner.member.service;
 
 import com.example.trip_planner.config.mail.service.MailService;
+import com.example.trip_planner.member.entity.Member;
 import com.example.trip_planner.member.repository.MemberRepository;
 import com.example.trip_planner.member.request.signUp.EmailAuthRequest;
 import com.example.trip_planner.member.request.signUp.CheckAuthTokenRequest;
+import com.example.trip_planner.member.request.signUp.SignUpRequest;
 import com.example.trip_planner.member.util.AuthTokenIssuance;
 import com.example.trip_planner.member.util.EmailVerification;
 import com.example.trip_planner.config.redis.service.RedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
 import java.util.Optional;
 
 @Slf4j
@@ -23,6 +27,7 @@ public class MemberServiceImpl {
     private final MailService mailService;
     private final EmailVerification emailVerification;
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * 토큰 발급 후 레디스 등록 및 이메일 발송
@@ -75,5 +80,16 @@ public class MemberServiceImpl {
      */
     public boolean checkDuplicateUserId(String userId) {
         return memberRepository.findByUserId(userId).isEmpty();
+    }
+
+    public void signUp(SignUpRequest request) {
+        Member member = Member.builder()
+                .email(request.getEmail())
+                .userId(request.getUserId())
+                .password(request.getPassword())
+                .build();
+
+        member.hashPassword(passwordEncoder);
+        memberRepository.save(member);
     }
 }

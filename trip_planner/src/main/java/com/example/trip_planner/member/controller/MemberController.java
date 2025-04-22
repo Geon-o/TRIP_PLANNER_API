@@ -1,6 +1,7 @@
 package com.example.trip_planner.member.controller;
 
 import com.example.trip_planner.member.request.signUp.EmailAuthRequest;
+import com.example.trip_planner.member.request.signUp.SignUpRequest;
 import com.example.trip_planner.member.service.MemberServiceImpl;
 import com.example.trip_planner.member.request.signUp.CheckAuthTokenRequest;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +25,13 @@ public class MemberController {
     }
 
     @GetMapping("/checkDuplicateUserId/{userId}")
-    public boolean checkDuplicateUserId(@PathVariable String userId) {
+    public boolean checkDuplicateUserId(@PathVariable("userId") String userId) {
         return service.checkDuplicateUserId(userId);
+    }
+
+    @PostMapping("/signUp")
+    public void signUp(@RequestBody SignUpRequest request) {
+        service.signUp(request);
     }
 }
 

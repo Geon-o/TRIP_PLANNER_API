@@ -29,7 +29,7 @@ spring:
     generate-ddl: true
     open-in-view: false
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
 
   mail:
     host: smtp.gmail.com
