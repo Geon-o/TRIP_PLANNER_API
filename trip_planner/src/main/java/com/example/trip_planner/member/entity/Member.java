@@ -2,8 +2,8 @@ package com.example.trip_planner.member.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
@@ -27,11 +27,11 @@ public class Member {
     @Column(nullable = false)
     private String password;
 
-    @CreatedDate
+    @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime insertDate;
 
-    @LastModifiedDate
+    @UpdateTimestamp
     private LocalDateTime updateDate;
 
     public Member hashPassword(PasswordEncoder passwordEncoder) {
