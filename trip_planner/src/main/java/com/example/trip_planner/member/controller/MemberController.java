@@ -1,5 +1,7 @@
 package com.example.trip_planner.member.controller;
 
+import com.example.trip_planner.member.request.signIn.SignInRequest;
+import com.example.trip_planner.member.request.signIn.SignInResponse;
 import com.example.trip_planner.member.request.signUp.EmailAuthRequest;
 import com.example.trip_planner.member.request.signUp.SignUpRequest;
 import com.example.trip_planner.member.service.MemberServiceImpl;
@@ -32,6 +34,11 @@ public class MemberController {
     @PostMapping("/signUp")
     public void signUp(@RequestBody SignUpRequest request) {
         service.signUp(request);
+    }
+
+    @PostMapping("/signIn")
+    public SignInResponse signIn(@RequestBody SignInRequest request) {
+        return service.signIn(request);
     }
 }
 

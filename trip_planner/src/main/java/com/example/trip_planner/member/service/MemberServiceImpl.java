@@ -3,6 +3,8 @@ package com.example.trip_planner.member.service;
 import com.example.trip_planner.config.mail.service.MailService;
 import com.example.trip_planner.member.entity.Member;
 import com.example.trip_planner.member.repository.MemberRepository;
+import com.example.trip_planner.member.request.signIn.SignInRequest;
+import com.example.trip_planner.member.request.signIn.SignInResponse;
 import com.example.trip_planner.member.request.signUp.EmailAuthRequest;
 import com.example.trip_planner.member.request.signUp.CheckAuthTokenRequest;
 import com.example.trip_planner.member.request.signUp.SignUpRequest;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
 import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -31,6 +34,7 @@ public class MemberServiceImpl {
 
     /**
      * 토큰 발급 후 레디스 등록 및 이메일 발송
+     *
      * @param request
      */
     public void registerVerificationNo(EmailAuthRequest request) {
@@ -59,6 +63,7 @@ public class MemberServiceImpl {
 
     /**
      * 이메일로 발송된 인증번호 확인하는 로직
+     *
      * @param request
      * @return
      */
@@ -75,6 +80,7 @@ public class MemberServiceImpl {
 
     /**
      * 사용자 Id 중복체크 로직
+     *
      * @param userId
      * @return
      */
@@ -93,5 +99,31 @@ public class MemberServiceImpl {
 
         member.hashPassword(passwordEncoder);
         memberRepository.save(member);
+    }
+
+    public SignInResponse signIn(SignInRequest request) {
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        Optional<Member> maybeMember = memberRepository.findByUserId(request.getUserId());
+
+        if (maybeMember.isPresent()) {
+
+            Member member = maybeMember.get();
+            if (!maybeMember.get().checkPassword(request.getPassword(), passwordEncoder)) {
+                throw new RuntimeException("패스워드가 일치하지 않습니다.");
+            }
+
+            UUID authToken = UUID.randomUUID();
+
+            redisService.deleteByKey(authToken.toString());
+            redisService.setKeyAndValue(authToken.toString(), String.valueOf(member.getId()), 1440);
+
+            var signInResponse = SignInResponse.builder()
+                    .authToken(authToken.toString())
+                    .userId(member.getUserId())
+                    .build();
+
+            return signInResponse;
+        }
+        throw new RuntimeException("가입된 사용자가 아닙니다.");
     }
 }
