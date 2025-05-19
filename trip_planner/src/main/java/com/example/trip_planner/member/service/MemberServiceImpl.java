@@ -11,6 +11,7 @@ import com.example.trip_planner.member.request.signUp.SignUpRequest;
 import com.example.trip_planner.member.util.AuthTokenIssuance;
 import com.example.trip_planner.member.util.EmailVerification;
 import com.example.trip_planner.config.redis.service.RedisService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -56,7 +57,7 @@ public class MemberServiceImpl {
             mailService.sendMail(email, token);
 
         } catch (Exception e) {
-            log.info("메일 전송 실패!");
+            log.info("메일 전송 실패!", e);
         }
 
     }
@@ -88,6 +89,7 @@ public class MemberServiceImpl {
         return memberRepository.findByUserId(userId).isEmpty();
     }
 
+    @Transactional
     public void signUp(SignUpRequest request) {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
