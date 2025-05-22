@@ -7,6 +7,7 @@ import com.example.trip_planner.member.request.signUp.SignUpRequest;
 import com.example.trip_planner.member.service.MemberServiceImpl;
 import com.example.trip_planner.member.request.signUp.CheckAuthTokenRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -37,7 +38,7 @@ public class MemberController {
     }
 
     @PostMapping("/signIn")
-    public SignInResponse signIn(@RequestBody SignInRequest request) {
+    public ResponseEntity<SignInResponse> signIn(@RequestBody SignInRequest request) {
         return service.signIn(request);
     }
 }

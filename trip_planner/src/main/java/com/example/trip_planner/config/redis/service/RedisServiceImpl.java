@@ -29,8 +29,7 @@ public class RedisServiceImpl implements RedisService{
     @Override
     public void setKeyAndValue(String token, String memNo, int expireTime) {
         ValueOperations<String, String> valueOps = stringRedisTemplate.opsForValue();
-        int ttlSeconds = expireTime * 60;
-        valueOps.set(token, memNo, Duration.ofSeconds(ttlSeconds));
+        valueOps.set(token, memNo, Duration.ofSeconds(expireTime));
     }
 
     @Override

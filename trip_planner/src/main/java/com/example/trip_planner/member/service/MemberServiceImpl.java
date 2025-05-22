@@ -11,14 +11,20 @@ import com.example.trip_planner.member.request.signUp.SignUpRequest;
 import com.example.trip_planner.member.util.AuthTokenIssuance;
 import com.example.trip_planner.member.util.EmailVerification;
 import com.example.trip_planner.config.redis.service.RedisService;
-import jakarta.transaction.Transactional;
+import com.example.trip_planner.member.util.JwtUtil;
+import io.jsonwebtoken.Jwt;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.reflect.Field;
+import java.time.Duration;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -32,6 +38,7 @@ public class MemberServiceImpl {
     private final MailService mailService;
     private final EmailVerification emailVerification;
     private final MemberRepository memberRepository;
+    private final JwtUtil jwtUtil;
 
     /**
      * 토큰 발급 후 레디스 등록 및 이메일 발송
@@ -44,7 +51,7 @@ public class MemberServiceImpl {
             emailVerification.emailVerification(request.getEmail());
 
             String token = tokenIssuance.issueToken();
-            redisService.setKeyAndValue(request.getEmail(), token, request.getDeadlineTime());
+            redisService.setKeyAndValue(request.getEmail(), token, 300); // 초단위
             sendTokenToEmail(request.getEmail(), token);
 
         } catch (IllegalArgumentException e) {
@@ -57,7 +64,7 @@ public class MemberServiceImpl {
             mailService.sendMail(email, token);
 
         } catch (Exception e) {
-            log.info("메일 전송 실패!", e);
+            log.info("메일 전송 실패!");
         }
 
     }
@@ -88,7 +95,6 @@ public class MemberServiceImpl {
     public boolean checkDuplicateUserId(String userId) {
         return memberRepository.findByUserId(userId).isEmpty();
     }
-
     @Transactional
     public void signUp(SignUpRequest request) {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -103,7 +109,7 @@ public class MemberServiceImpl {
         memberRepository.save(member);
     }
 
-    public SignInResponse signIn(SignInRequest request) {
+    public ResponseEntity<SignInResponse> signIn(SignInRequest request) {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         Optional<Member> maybeMember = memberRepository.findByUserId(request.getUserId());
 
@@ -111,21 +117,34 @@ public class MemberServiceImpl {
 
             Member member = maybeMember.get();
             if (!maybeMember.get().checkPassword(request.getPassword(), passwordEncoder)) {
-                throw new RuntimeException("패스워드가 일치하지 않습니다.");
+                throw new RuntimeException("비밀번호가 일치하지 않습니다.");
             }
 
-            UUID authToken = UUID.randomUUID();
+            UUID refreshToken = UUID.randomUUID();
 
-            redisService.deleteByKey(authToken.toString());
-            redisService.setKeyAndValue(authToken.toString(), String.valueOf(member.getId()), 1440);
+            redisService.deleteByKey(refreshToken.toString());
+            redisService.setKeyAndValue(refreshToken.toString(), String.valueOf(member.getId()), 604800);
 
-            var signInResponse = SignInResponse.builder()
-                    .authToken(authToken.toString())
+            String accessToken = jwtUtil.createAccessToken(String.valueOf(member.getId()));
+
+            SignInResponse response = SignInResponse.builder()
                     .userId(member.getUserId())
+                    .authToken(accessToken)
                     .build();
 
-            return signInResponse;
+            ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken.toString())
+                    .httpOnly(true)
+                    .secure(false)
+                    .path("/")
+                    .maxAge(Duration.ofSeconds(604800))
+                    .sameSite("Strict")
+                    .build();
+
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                    .body(response);
         }
+
         throw new RuntimeException("가입된 사용자가 아닙니다.");
     }
 }

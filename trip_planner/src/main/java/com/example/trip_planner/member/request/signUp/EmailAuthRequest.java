@@ -8,7 +8,5 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class EmailAuthRequest {
-
     private String email;
-    private int deadlineTime;
 }
