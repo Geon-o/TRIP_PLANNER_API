@@ -1,7 +1,7 @@
-package com.example.trip_planner.auth.controller;
+package com.example.trip_planner.jwt.auth.controller;
 
-import com.example.trip_planner.auth.service.JwtAuthServiceImpl;
-import com.example.trip_planner.member.util.JwtUtil;
+import com.example.trip_planner.jwt.auth.dto.JwtTokenDto;
+import com.example.trip_planner.jwt.auth.service.JwtAuthServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +17,7 @@ public class JwtAuthController {
     private final JwtAuthServiceImpl jwtService;
 
     @PostMapping("/reIssuanceToken")
-    public ResponseEntity<?> reIssuanceToken(HttpServletRequest request) {
+    public ResponseEntity<JwtTokenDto> reIssuanceToken(HttpServletRequest request) {
         return jwtService.reIssuanceToken(request);
     }
 }

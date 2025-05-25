@@ -1,6 +1,8 @@
-package com.example.trip_planner.auth.service;
+package com.example.trip_planner.jwt.auth.service;
 
 import com.example.trip_planner.config.redis.service.RedisService;
+import com.example.trip_planner.jwt.JwtUtil;
+import com.example.trip_planner.jwt.auth.dto.JwtTokenDto;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -9,29 +11,29 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class JwtAuthServiceImpl {
 
     private final RedisService redisService;
+    private final JwtUtil jwtUtil;
 
-    public ResponseEntity<?> reIssuanceToken(HttpServletRequest request) {
+    public ResponseEntity<JwtTokenDto> reIssuanceToken(HttpServletRequest request) {
         String refreshToken = extractRefreshTokenFromCookie(request);
-
 
         Long memNo = redisService.getValueByKey(refreshToken);
         if (memNo == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message", "토큰이 유효하지 않습니다."));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
 
-        UUID newRefreshToken = UUID.randomUUID();
+        String newAccessToken = jwtUtil.createAccessToken(String.valueOf(memNo));
+        JwtTokenDto jwtTokenDto = JwtTokenDto.builder()
+                .newAccessToken(newAccessToken)
+                .userId(memNo)
+                .build();
 
-        redisService.deleteByKey(refreshToken);
-        redisService.setKeyAndValue(newRefreshToken.toString(), String.valueOf(memNo), 604800);
-
-        return null;
+        return ResponseEntity.ok().body(jwtTokenDto);
     }
 
     private String extractRefreshTokenFromCookie(HttpServletRequest request) {

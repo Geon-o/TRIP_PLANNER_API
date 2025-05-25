@@ -1,4 +1,4 @@
-package com.example.trip_planner.member.util;
+package com.example.trip_planner.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -14,7 +14,7 @@ import java.util.Date;
 public class JwtUtil {
 
     private final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
-    private final long EXPIRATION_TIME = 1000 * 60;
+    private final long EXPIRATION_TIME = 1000 * 60 * 15;
 
     public String createAccessToken(String userId) {
         return Jwts.builder()
