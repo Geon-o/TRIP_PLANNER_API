@@ -10,8 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
-
 @Service
 @RequiredArgsConstructor
 public class JwtAuthServiceImpl {
@@ -43,10 +41,15 @@ public class JwtAuthServiceImpl {
 
             for (Cookie cookie : cookies) {
                 if ("refreshToken".equals(cookie.getName())) {
+                    if (redisService.getValueByKey(cookie.getValue()) == null) {
+                        throw new RuntimeException("refreshToken 만료");
+                    }
                     return cookie.getValue();
                 }
             }
         }
+
+
 
         return null;
     }
